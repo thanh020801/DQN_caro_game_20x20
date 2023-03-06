@@ -107,11 +107,9 @@ def game():
 game()
 
 
-a  = 0
 
 with open('board.txt', mode='w') as f:
     f.write(str(BOARD_STATE))
 with open('board.txt') as f:
     print(f.read())
-    a = f.read()
 

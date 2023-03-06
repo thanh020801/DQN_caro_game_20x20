@@ -23,7 +23,7 @@ VALUE_SCORE_ATTACK_PLAYER = {
 	2: 110, 
 	3: 10000, 
 	4: 210000, 
-	5: 21000000,
+	5: 91000000,
 }
 VALUE_SCORE_DEFENSE = {
 	0: 0, 
@@ -31,7 +31,7 @@ VALUE_SCORE_DEFENSE = {
 	2: 300, 
 	3: 30000, 
 	4: 500000, 
-	5: 90000000,
+	5: 30000000,
 }
 
 # Tính điểm cho khoảng cách từ quân cờ đến vị trí trung tâm
@@ -104,10 +104,10 @@ def count_evaluate_attack(arr, player, VALUE_SCORE):
 	# print(list_attack)
 	for start , end in list_attack:
 		block = check_block(arr, start, end, -player)
-		if block == 2:
+		num = end - start +1
+		if block == 2 and num < 5:
 			score_player += 0
 		else:
-			num = end - start +1
 			if num > 5:
 				num = 5
 			score_player += VALUE_SCORE[num]
