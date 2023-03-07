@@ -204,10 +204,10 @@ def score_distance(board, player):
 		for j in range(BOARD):
 			if board[i][j] == player:
 				_,d = math.modf(math.sqrt((n - i)**2 + (n - j)**2))
-				score+= 100/ (d+1) + 100 / (d+1)
+				score+= 25/ (d+1) + 25 / (d+1)
 			if board[i][j] == -player:
 				_,d = math.modf(math.sqrt((n - i)**2 + (n - j)**2))
-				score-= 100/ (d+1) + 100 / (d+1)
+				score-= 25/ (d+1) + 25 / (d+1)
 
 	return score
 
@@ -238,6 +238,7 @@ def get_list_start_end(arr, player):
 	count1 = 0
 	list_max_count1 = []
 	start = -1
+	# [0,0,0,0,1,0,0,0,0,1,0,0,1]
 	for i in range(len(arr)):
 		# Nếu cờ đối thủ ở vị trí đầu tiên
 		if arr[i] == -player:
@@ -246,7 +247,7 @@ def get_list_start_end(arr, player):
 				start = i
 		#  Nếu cở đối thử ở vị trí cuối cùng
 		if len(arr)-1 == i:
-			if start >=0:
+			if start >=0 and arr[i] == -player:
 				list_max_count1.append([start, i])
 				break
 		#  Nếu không phải cờ đối thủ
@@ -303,8 +304,10 @@ def count_evaluate_defense(arr, player):
 def evaluate(board,player, opponent):
 	score = 0
 	for i in board:
+		a=0
 		score += count_evaluate_defense(i, player)
 		score += count_evaluate_attack(i, player, VALUE_SCORE_ATTACK1)  # 11  0
+		# print('score row', score)
 		score -= count_evaluate_attack(i, opponent)  # 0  -11
 
 	for i in range(BOARD):
@@ -325,13 +328,12 @@ def evaluate(board,player, opponent):
 			a=1
 			score += count_evaluate_defense(i,  player)
 			score += count_evaluate_attack(i, player, VALUE_SCORE_ATTACK1)  # 0
+			# print('score row', score)
 			score -= count_evaluate_attack(i, opponent) #-11
 
 
-	# print('point bot diag: ', score)
 	score += score_distance(board, player)
-	# print('score_distance(board, BOT.chess)', score_distance(board, BOT.chess))
-	# print('score end: ', score)
+
 	return score
 # ////////////////////////////////////////////////////////////////////////////////
 
@@ -346,7 +348,7 @@ def minimax(board, depth, maximizingPlayer, alpha, beta, player, opponent):
 	if maximizingPlayer:
 		best_value = -infinity
 		best_move = [-1, -1]
-		for move in empty_cells_around(board,1):
+		for move in empty_cells(board):
 			row , col = move[0], move[1] 
 			board[row][col] = player
 			value, m = minimax(board, depth - 1, False, alpha, beta, player, opponent)
@@ -364,7 +366,7 @@ def minimax(board, depth, maximizingPlayer, alpha, beta, player, opponent):
 	else:
 		best_value = infinity
 		best_move = [-1, -1]
-		for move in empty_cells_around(board,1):
+		for move in empty_cells(board):
 			row , col = move[0], move[1] 
 			board[row][col] = opponent
 			value, _ = minimax(board, depth-1, True, alpha, beta, player, opponent)
@@ -388,24 +390,9 @@ def set_move_human():
 		print('Vi Tri ko hop le')
 		return set_move_human()
 
-# def set_move_human(board):
-# 		# row = random.randint(0, BOARD-1)
-# 		# col = random.randint(0,BOARD-1)
-
-# 		alpha = -infinity
-# 		beta = infinity
-# 		cur_board = board
-# 		best,move = minimax(cur_board, 3, True, alpha, beta )
-# 		print('vi tri du doan: ',best, move)
-
-# 		# r , c = best[0], best[1]
-# 		return move[0], move[1]
-
-
 def set_move_bot(board, AI, person):
 		row = random.randint(0, BOARD-1)
 		col = random.randint(0,BOARD-1)
-
 		if len(empty_cells_around(board, 1)) <= 0 :
 			return row, col
 		
@@ -414,7 +401,7 @@ def set_move_bot(board, AI, person):
 		cur_board = board
 		
 		best,move = minimax(cur_board, 1, True, alpha, beta, AI, person )
-		print('vi tri du doan: ',best, move)
+		print('Minimax: ', best ,move)
 		return move[0], move[1]
 # AI
 
@@ -431,9 +418,25 @@ def game():
 # a = [1,-1,1,-1,0,-1,1,0,-1,-1]
 # print(is_blocked(a,4,1))
 
-BOARD_STATE[1][1] = 1
-BOARD_STATE[2][2] = -1 
+b = [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -1], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], 
+ [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]]
 
-score = evaluate(BOARD_STATE,BOT.chess, HUMAN.chess)
-
-print(score)
+# print(evaluate(b, BOT.chess, HUMAN.chess))

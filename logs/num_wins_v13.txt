@@ -1,0 +1,2 @@
+MINIMAX_TURN wins: 4
+DQN_TURN wins: 0

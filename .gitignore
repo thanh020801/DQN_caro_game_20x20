@@ -6,7 +6,7 @@ Scripts/
 
 
 .pyenv/
-.myvenv/
+.myvenv/lib
 env/
 
 *.pyc
