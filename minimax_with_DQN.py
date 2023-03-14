@@ -1,11 +1,11 @@
 import pygame
-import caro_part3 as caro
+import caro_part5 as caro
 
 import numpy as np
 from tensorflow import keras
 
-model = keras.models.load_model('models/model_DQN_V8.h5')
-model.load_weights('models/model_DQN_V8_Weights.h5')
+model = keras.models.load_model('models/model_DQN_V20.h5')
+model.load_weights('models/model_DQN_V20_Weights.h5')
 # tim phan tu co vi tri hop le va co xac suat du doan cao nhat
 def probability_positions(board, prediction):
     # emp = caro.empty_cells_around(board,2)
@@ -137,16 +137,20 @@ def handle_events(board, player, opponent):
 BOARD_STATE =  caro.init_chess(caro.BOARD, 5)
 
 
+BOT.state = True
+HUMAN.state = False
 def game():
-	while True:
-		# show_chess_board(BOARD_STATE)
-		handle_events(BOARD_STATE, caro.BOT, caro.HUMAN)
-        
-		if caro.game_over(BOARD_STATE, caro.BOT, caro.HUMAN):
-			print('Ket thuc van')
-			# show_chess_board(BOARD_STATE)
-			break
-		pygame.display.update()
+    while True:
+        # show_chess_board(BOARD_STATE)
+        handle_events(BOARD_STATE, caro.BOT, caro.HUMAN)
+        pygame.display.update()
+        with open('board.txt', mode='w') as f:
+            f.write(str(BOARD_STATE))
+        if caro.game_over(BOARD_STATE, caro.BOT.chess, caro.HUMAN.chess):
+            print('Ket thuc van')
+            # show_chess_board(BOARD_STATE)
+            break
+		
 
 game()
 

@@ -1,0 +1,2 @@
+MINIMAX_TURN wins: 52
+DQN_TURN wins: 10

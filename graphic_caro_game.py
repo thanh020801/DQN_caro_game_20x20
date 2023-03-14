@@ -58,7 +58,7 @@ def handle_events(board, player, opponent):
             quit()
 
         elif player.state:
-            row, col = caro.set_move_bot(board, player.chess, opponent.chess)
+            row, col, _ = caro.set_move_bot(board, player.chess, opponent.chess)
             board[row][col] = player.chess
             draw_board(board)
             player.set_state()

@@ -36,8 +36,6 @@ VALUE_SCORE_DEFENSE = {
 	5: 30000000,
 }
 
-
-
 def init_chess(n, win_state):
 	i = 0
 	rows, cols = (n, n)
@@ -394,15 +392,15 @@ def set_move_bot(board, AI, person):
 		row = random.randint(0, BOARD-1)
 		col = random.randint(0,BOARD-1)
 		if len(empty_cells_around(board, 1)) <= 0 :
-			return row, col
+			return row, col, evaluate(board, AI, person)
 		
 		alpha = -infinity
 		beta = infinity
 		cur_board = board
 		
 		best,move = minimax(cur_board, 1, True, alpha, beta, AI, person )
-		print('Minimax: ', best ,move)
-		return move[0], move[1]
+		# print('Minimax: ', best ,move)
+		return move[0], move[1], best
 # AI
 
 BOARD_STATE =  init_chess(BOARD, 5)
